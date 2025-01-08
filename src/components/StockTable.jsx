@@ -1,8 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
-export function StockTable({ stocks, onDelete }) {
+export function StockTable({ stocks, onDelete, onEdit }) {
   return (
     <div className="rounded-md border">
       <Table>
@@ -22,7 +22,14 @@ export function StockTable({ stocks, onDelete }) {
               <TableCell>{stock.shares}</TableCell>
               <TableCell>${stock.price.toFixed(2)}</TableCell>
               <TableCell>${(stock.shares * stock.price).toFixed(2)}</TableCell>
-              <TableCell>
+              <TableCell className="space-x-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onEdit(stock)}
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
                 <Button
                   variant="ghost"
                   size="icon"

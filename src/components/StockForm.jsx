@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
-export function StockForm({ onSubmit }) {
+export function StockForm({ onSubmit, editStock = null }) {
   const [symbol, setSymbol] = useState("");
   const [shares, setShares] = useState("");
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (editStock) {
+      setSymbol(editStock.symbol);
+      setShares(editStock.shares.toString());
+      setOpen(true);
+    }
+  }, [editStock]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,18 +35,20 @@ export function StockForm({ onSubmit }) {
     setOpen(false);
     toast({
       title: "Success",
-      description: "Stock added to portfolio",
+      description: editStock ? "Stock updated successfully" : "Stock added to portfolio",
     });
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-primary">Add Stock</Button>
+        <Button className="bg-primary hover:bg-primary/90">
+          {editStock ? "Edit Stock" : "Add Stock"}
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Stock to Portfolio</DialogTitle>
+          <DialogTitle>{editStock ? "Edit Stock" : "Add Stock to Portfolio"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -48,6 +58,7 @@ export function StockForm({ onSubmit }) {
               value={symbol}
               onChange={(e) => setSymbol(e.target.value)}
               placeholder="AAPL"
+              disabled={!!editStock}
             />
           </div>
           <div>
@@ -62,7 +73,9 @@ export function StockForm({ onSubmit }) {
               step="any"
             />
           </div>
-          <Button type="submit" className="w-full bg-primary">Add Stock</Button>
+          <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
+            {editStock ? "Update Stock" : "Add Stock"}
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

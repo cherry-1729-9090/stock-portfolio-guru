@@ -13,6 +13,8 @@ const finnhubClient = new finnhub.DefaultApi();
 finnhubClient.apiClient = new finnhub.ApiClient();
 finnhubClient.apiClient.authentications['api_key'].apiKey = api_key;
 
+const POLLING_INTERVAL = 60000; // Poll every 60 seconds
+
 const Index = () => {
   const [stocks, setStocks] = useState([]);
   const [editStock, setEditStock] = useState(null);
@@ -49,12 +51,29 @@ const Index = () => {
       })
     );
     setStocks(updatedStocks);
+    toast({
+      title: "Updated",
+      description: "Stock prices have been updated",
+    });
   };
 
+  // Set up polling interval
   useEffect(() => {
-    const interval = setInterval(updatePrices, 60000); // Update every minute
-    return () => clearInterval(interval);
-  }, [stocks]);
+    // Initial update
+    if (stocks.length > 0) {
+      updatePrices();
+    }
+
+    // Set up polling interval
+    const intervalId = setInterval(() => {
+      if (stocks.length > 0) {
+        updatePrices();
+      }
+    }, POLLING_INTERVAL);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [stocks.length]); // Dependency on stocks.length to restart polling when stocks are added/removed
 
   const handleSubmit = async ({ symbol, shares, name, buyPrice }) => {
     const price = await fetchStockPrice(symbol);
@@ -76,6 +95,11 @@ const Index = () => {
     } else {
       setStocks([...stocks, { symbol, shares, price, name, buyPrice }]);
     }
+
+    toast({
+      title: "Success",
+      description: editStock ? "Stock updated successfully" : "Stock added successfully",
+    });
   };
 
   const handleEdit = (stock) => {

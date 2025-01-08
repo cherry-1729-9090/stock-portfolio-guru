@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Plus, Edit } from "lucide-react";
 
 export function StockForm({ onSubmit, editStock = null }) {
   const [symbol, setSymbol] = useState("");
@@ -42,13 +43,25 @@ export function StockForm({ onSubmit, editStock = null }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-primary hover:bg-primary/90">
-          {editStock ? "Edit Stock" : "Add Stock"}
+        <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200">
+          {editStock ? (
+            <>
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Stock
+            </>
+          ) : (
+            <>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Stock
+            </>
+          )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         <DialogHeader>
-          <DialogTitle>{editStock ? "Edit Stock" : "Add Stock to Portfolio"}</DialogTitle>
+          <DialogTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+            {editStock ? "Edit Stock" : "Add Stock to Portfolio"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -59,6 +72,7 @@ export function StockForm({ onSubmit, editStock = null }) {
               onChange={(e) => setSymbol(e.target.value)}
               placeholder="AAPL"
               disabled={!!editStock}
+              className="bg-white/50 dark:bg-gray-800/50"
             />
           </div>
           <div>
@@ -71,9 +85,13 @@ export function StockForm({ onSubmit, editStock = null }) {
               placeholder="10"
               min="0"
               step="any"
+              className="bg-white/50 dark:bg-gray-800/50"
             />
           </div>
-          <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
+          <Button 
+            type="submit" 
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
+          >
             {editStock ? "Update Stock" : "Add Stock"}
           </Button>
         </form>

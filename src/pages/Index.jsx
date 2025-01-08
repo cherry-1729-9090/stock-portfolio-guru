@@ -5,9 +5,9 @@ import { StockTable } from "@/components/StockTable";
 import { PortfolioChart } from "@/components/PortfolioChart";
 import { LineChart } from "@/components/LineChart";
 import { useToast } from "@/hooks/use-toast";
-import { TrendingUp, TrendingDown, DollarSign } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react";
 
-const ALPHA_VANTAGE_API_KEY = "demo"; // Replace with your API key
+const ALPHA_VANTAGE_API_KEY = "CQ5QLR5T43CF3QPV";
 
 const Index = () => {
   const [stocks, setStocks] = useState([]);
@@ -99,62 +99,70 @@ const Index = () => {
   );
 
   return (
-    <div className="container py-8 space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold">Portfolio Tracker</h1>
-        <StockForm onSubmit={handleSubmit} editStock={editStock} />
-      </div>
-      
-      <div className="grid gap-6 md:grid-cols-3">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total Value</CardTitle>
-            <DollarSign className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold animate-number-change">
-              ${totalValue.toFixed(2)}
-            </div>
-          </CardContent>
-        </Card>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="container py-8 space-y-8 px-4 mx-auto max-w-7xl">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+            Portfolio Tracker
+          </h1>
+          <StockForm onSubmit={handleSubmit} editStock={editStock} />
+        </div>
         
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Number of Stocks</CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stocks.length}</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Top Holding</CardTitle>
-            <TrendingDown className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{topStock.symbol}</div>
-            <p className="text-xs text-muted-foreground">
-              ${topStock.value.toFixed(2)}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Total Value</CardTitle>
+              <DollarSign className="h-4 w-4 text-blue-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold animate-number-change">
+                ${totalValue.toFixed(2)}
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Number of Stocks</CardTitle>
+              <TrendingUp className="h-4 w-4 text-green-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stocks.length}</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">Top Holding</CardTitle>
+              <Activity className="h-4 w-4 text-purple-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{topStock.symbol}</div>
+              <p className="text-xs text-muted-foreground">
+                ${topStock.value.toFixed(2)}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <PortfolioChart stocks={stocks} />
-        <LineChart stocks={stocks} />
-      </div>
+        <div className="grid gap-6 md:grid-cols-2">
+          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-200">
+            <PortfolioChart stocks={stocks} />
+          </Card>
+          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-200">
+            <LineChart stocks={stocks} />
+          </Card>
+        </div>
 
-      <div className="rounded-lg border bg-card">
-        <div className="p-6">
-          <h2 className="text-lg font-semibold mb-4">Portfolio Holdings</h2>
-          <StockTable 
-            stocks={stocks} 
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-          />
+        <div className="rounded-lg border bg-card shadow-lg hover:shadow-xl transition-all duration-200">
+          <div className="p-6">
+            <h2 className="text-lg font-semibold mb-4">Portfolio Holdings</h2>
+            <StockTable 
+              stocks={stocks} 
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
+          </div>
         </div>
       </div>
     </div>

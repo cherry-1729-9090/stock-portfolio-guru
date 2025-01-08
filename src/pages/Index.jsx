@@ -6,24 +6,52 @@ import { PortfolioChart } from "@/components/PortfolioChart";
 import { LineChart } from "@/components/LineChart";
 import { useToast } from "@/hooks/use-toast";
 import { TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react";
+import finnhub from 'finnhub';
 
-const ALPHA_VANTAGE_API_KEY = 'demo'; // Using Alpha Vantage's demo key for testing
+// Initialize Finnhub client
+const getStoredApiKey = () => localStorage.getItem('FINNHUB_API_KEY');
+const api = new finnhub.DefaultApi();
 
 const Index = () => {
   const [stocks, setStocks] = useState([]);
   const [editStock, setEditStock] = useState(null);
   const { toast } = useToast();
 
+  useEffect(() => {
+    const storedApiKey = getStoredApiKey();
+    if (!storedApiKey) {
+      const apiKey = prompt("Please enter your Finnhub API key:");
+      if (apiKey) {
+        localStorage.setItem('FINNHUB_API_KEY', apiKey);
+        api.apiKey = apiKey;
+      }
+    } else {
+      api.apiKey = storedApiKey;
+    }
+  }, []);
+
   const fetchStockPrice = async (symbol) => {
     try {
-      const response = await fetch(
-        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API_KEY}`
-      );
-      const data = await response.json();
-      if (data["Global Quote"]) {
-        return parseFloat(data["Global Quote"]["05. price"]);
-      }
-      throw new Error("Invalid stock symbol");
+      return new Promise((resolve) => {
+        if (!api.apiKey) {
+          toast({
+            title: "Error",
+            description: "Please set your Finnhub API key",
+            variant: "destructive",
+          });
+          resolve(null);
+          return;
+        }
+        
+        api.quote(symbol, (error, data) => {
+          if (error) {
+            console.error("Error fetching stock price:", error);
+            resolve(null);
+          } else {
+            resolve(data.c); // Current price
+          }
+        });
+      });
     } catch (error) {
       console.error("Error fetching stock price:", error);
       return null;

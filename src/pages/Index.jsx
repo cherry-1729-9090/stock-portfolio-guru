@@ -5,7 +5,6 @@ import { StockTable } from "@/components/StockTable";
 import { PortfolioChart } from "@/components/PortfolioChart";
 import { LineChart } from "@/components/LineChart";
 import { useToast } from "@/hooks/use-toast";
-import { TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react";
 import * as finnhub from 'finnhub';
 
 // Initialize Finnhub client
@@ -115,7 +114,6 @@ const Index = () => {
           <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Total Value</CardTitle>
-              <DollarSign className="h-4 w-4 text-blue-600" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold animate-number-change">
@@ -127,11 +125,6 @@ const Index = () => {
           <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Total Gain/Loss</CardTitle>
-              {totalGain >= 0 ? (
-                <TrendingUp className="h-4 w-4 text-green-600" />
-              ) : (
-                <TrendingDown className="h-4 w-4 text-red-600" />
-              )}
             </CardHeader>
             <CardContent>
               <div className={`text-2xl font-bold ${totalGain >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -143,7 +136,6 @@ const Index = () => {
           <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Top Holding</CardTitle>
-              <Activity className="h-4 w-4 text-purple-600" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{topStock.symbol}</div>
@@ -155,12 +147,8 @@ const Index = () => {
         </div>
 
         <div className="grid gap-10 md:grid-cols-2">
-          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-200">
-            <PortfolioChart stocks={stocks} />
-          </Card>
-          <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-200">
-            <LineChart stocks={stocks} />
-          </Card>
+          <PortfolioChart stocks={stocks} />
+          <LineChart stocks={stocks} />
         </div>
 
         <div className="rounded-lg border bg-card shadow-lg hover:shadow-xl transition-all duration-200">

@@ -1,17 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+const COLORS = ["#1E3A8A", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD"];
 
 export function LineChart({ stocks }) {
-  // Transform stock data for the line chart
+  // Create data points for the chart
   const data = stocks.map((stock) => ({
     name: stock.symbol,
     value: stock.shares * stock.price,
+    price: stock.price,
   }));
 
   return (
     <Card className="h-[400px]">
       <CardHeader>
-        <CardTitle>Portfolio Value Distribution</CardTitle>
+        <CardTitle>Stock Performance</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
@@ -19,9 +22,18 @@ export function LineChart({ stocks }) {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+            <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="value" stroke="#1E3A8A" strokeWidth={2} />
+            {stocks.map((stock, index) => (
+              <Line
+                key={stock.symbol}
+                type="monotone"
+                dataKey="price"
+                name={stock.symbol}
+                stroke={COLORS[index % COLORS.length]}
+                activeDot={{ r: 8 }}
+              />
+            ))}
           </RechartsLineChart>
         </ResponsiveContainer>
       </CardContent>

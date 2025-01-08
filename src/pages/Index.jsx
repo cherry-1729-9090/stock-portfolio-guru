@@ -6,8 +6,11 @@ import { PortfolioChart } from "@/components/PortfolioChart";
 import { LineChart } from "@/components/LineChart";
 import { useToast } from "@/hooks/use-toast";
 import { TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react";
+import finnhub from 'finnhub';
 
-const ALPHA_VANTAGE_API_KEY = "CQ5QLR5T43CF3QPV";
+const FINNHUB_API_KEY = 'YOUR_FINNHUB_API_KEY'; // Replace with your Finnhub API key
+const api = new finnhub.DefaultApi();
+api.apiKey = FINNHUB_API_KEY;
 
 const Index = () => {
   const [stocks, setStocks] = useState([]);
@@ -16,14 +19,16 @@ const Index = () => {
 
   const fetchStockPrice = async (symbol) => {
     try {
-      const response = await fetch(
-        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API_KEY}`
-      );
-      const data = await response.json();
-      if (data["Global Quote"]) {
-        return parseFloat(data["Global Quote"]["05. price"]);
-      }
-      throw new Error("Invalid stock symbol");
+      return new Promise((resolve) => {
+        api.quote(symbol, (error, data) => {
+          if (error) {
+            console.error("Error fetching stock price:", error);
+            resolve(null);
+          } else {
+            resolve(data.c); // Current price
+          }
+        });
+      });
     } catch (error) {
       console.error("Error fetching stock price:", error);
       return null;
@@ -41,12 +46,11 @@ const Index = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(updatePrices, 60000);
+    const interval = setInterval(updatePrices, 60000); // Update every minute
     return () => clearInterval(interval);
   }, [stocks]);
 
-  const handleSubmit = async ({ symbol, shares }) => {
-    const existingStock = stocks.find((s) => s.symbol === symbol);
+  const handleSubmit = async ({ symbol, shares, name, buyPrice }) => {
     const price = await fetchStockPrice(symbol);
     
     if (!price) {
@@ -58,22 +62,13 @@ const Index = () => {
       return;
     }
 
-    if (existingStock && !editStock) {
-      toast({
-        title: "Error",
-        description: "Stock already exists in portfolio",
-        variant: "destructive",
-      });
-      return;
-    }
-
     if (editStock) {
       setStocks(stocks.map((s) => 
-        s.symbol === symbol ? { ...s, shares } : s
+        s.symbol === symbol ? { ...s, shares, name, buyPrice } : s
       ));
       setEditStock(null);
     } else {
-      setStocks([...stocks, { symbol, shares, price }]);
+      setStocks([...stocks, { symbol, shares, price, name, buyPrice }]);
     }
   };
 
@@ -90,6 +85,7 @@ const Index = () => {
   };
 
   const totalValue = stocks.reduce((sum, stock) => sum + stock.shares * stock.price, 0);
+  const totalGain = stocks.reduce((sum, stock) => sum + (stock.shares * (stock.price - stock.buyPrice)), 0);
   const topStock = stocks.reduce(
     (max, stock) => {
       const value = stock.shares * stock.price;
@@ -101,14 +97,14 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container py-8 space-y-8 px-4 mx-auto max-w-7xl">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
             Portfolio Tracker
           </h1>
           <StockForm onSubmit={handleSubmit} editStock={editStock} />
         </div>
         
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3">
           <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Total Value</CardTitle>
@@ -123,11 +119,17 @@ const Index = () => {
           
           <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Number of Stocks</CardTitle>
-              <TrendingUp className="h-4 w-4 text-green-600" />
+              <CardTitle className="text-sm font-medium">Total Gain/Loss</CardTitle>
+              {totalGain >= 0 ? (
+                <TrendingUp className="h-4 w-4 text-green-600" />
+              ) : (
+                <TrendingDown className="h-4 w-4 text-red-600" />
+              )}
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stocks.length}</div>
+              <div className={`text-2xl font-bold ${totalGain >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                ${totalGain.toFixed(2)}
+              </div>
             </CardContent>
           </Card>
           
@@ -145,7 +147,7 @@ const Index = () => {
           </Card>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2">
           <Card className="border-none shadow-lg hover:shadow-xl transition-all duration-200">
             <PortfolioChart stocks={stocks} />
           </Card>

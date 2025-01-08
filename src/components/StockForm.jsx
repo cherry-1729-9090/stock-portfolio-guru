@@ -9,6 +9,8 @@ import { Plus, Edit } from "lucide-react";
 export function StockForm({ onSubmit, editStock = null }) {
   const [symbol, setSymbol] = useState("");
   const [shares, setShares] = useState("");
+  const [name, setName] = useState("");
+  const [buyPrice, setBuyPrice] = useState("");
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
 
@@ -16,13 +18,15 @@ export function StockForm({ onSubmit, editStock = null }) {
     if (editStock) {
       setSymbol(editStock.symbol);
       setShares(editStock.shares.toString());
+      setName(editStock.name || "");
+      setBuyPrice(editStock.buyPrice?.toString() || "");
       setOpen(true);
     }
   }, [editStock]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!symbol || !shares) {
+    if (!symbol || !shares || !name || !buyPrice) {
       toast({
         title: "Error",
         description: "Please fill in all fields",
@@ -30,9 +34,16 @@ export function StockForm({ onSubmit, editStock = null }) {
       });
       return;
     }
-    onSubmit({ symbol: symbol.toUpperCase(), shares: Number(shares) });
+    onSubmit({ 
+      symbol: symbol.toUpperCase(), 
+      shares: Number(shares),
+      name,
+      buyPrice: Number(buyPrice)
+    });
     setSymbol("");
     setShares("");
+    setName("");
+    setBuyPrice("");
     setOpen(false);
     toast({
       title: "Success",
@@ -65,6 +76,16 @@ export function StockForm({ onSubmit, editStock = null }) {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
+            <Label htmlFor="name">Stock Name</Label>
+            <Input
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Apple Inc."
+              className="bg-white/50 dark:bg-gray-800/50"
+            />
+          </div>
+          <div>
             <Label htmlFor="symbol">Stock Symbol</Label>
             <Input
               id="symbol"
@@ -85,6 +106,19 @@ export function StockForm({ onSubmit, editStock = null }) {
               placeholder="10"
               min="0"
               step="any"
+              className="bg-white/50 dark:bg-gray-800/50"
+            />
+          </div>
+          <div>
+            <Label htmlFor="buyPrice">Buy Price</Label>
+            <Input
+              id="buyPrice"
+              type="number"
+              value={buyPrice}
+              onChange={(e) => setBuyPrice(e.target.value)}
+              placeholder="150.00"
+              min="0"
+              step="0.01"
               className="bg-white/50 dark:bg-gray-800/50"
             />
           </div>

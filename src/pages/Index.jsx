@@ -7,11 +7,11 @@ import { LineChart } from "@/components/LineChart";
 import { useToast } from "@/hooks/use-toast";
 import * as finnhub from 'finnhub';
 
-// Initialize Finnhub client
+// Initialize Finnhub client with API key directly
 const api_key = 'ctvdbspr01qh15ov61f0ctvdbspr01qh15ov61fg';
 const finnhubClient = new finnhub.DefaultApi();
-// Set the API key configuration
-finnhubClient.setApiKey(finnhub.ApiClient.instance.authentications['api_key'], api_key);
+finnhubClient.apiClient = new finnhub.ApiClient();
+finnhubClient.apiClient.authentications['api_key'].apiKey = api_key;
 
 const Index = () => {
   const [stocks, setStocks] = useState([]);

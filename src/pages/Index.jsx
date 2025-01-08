@@ -6,11 +6,8 @@ import { PortfolioChart } from "@/components/PortfolioChart";
 import { LineChart } from "@/components/LineChart";
 import { useToast } from "@/hooks/use-toast";
 import { TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react";
-import finnhub from 'finnhub';
 
-const FINNHUB_API_KEY = 'YOUR_FINNHUB_API_KEY'; // Replace with your Finnhub API key
-const api = new finnhub.DefaultApi();
-api.apiKey = FINNHUB_API_KEY;
+const ALPHA_VANTAGE_API_KEY = 'demo'; // Using Alpha Vantage's demo key for testing
 
 const Index = () => {
   const [stocks, setStocks] = useState([]);
@@ -19,16 +16,14 @@ const Index = () => {
 
   const fetchStockPrice = async (symbol) => {
     try {
-      return new Promise((resolve) => {
-        api.quote(symbol, (error, data) => {
-          if (error) {
-            console.error("Error fetching stock price:", error);
-            resolve(null);
-          } else {
-            resolve(data.c); // Current price
-          }
-        });
-      });
+      const response = await fetch(
+        `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_API_KEY}`
+      );
+      const data = await response.json();
+      if (data["Global Quote"]) {
+        return parseFloat(data["Global Quote"]["05. price"]);
+      }
+      throw new Error("Invalid stock symbol");
     } catch (error) {
       console.error("Error fetching stock price:", error);
       return null;

@@ -6,7 +6,7 @@ import { PortfolioChart } from "@/components/PortfolioChart";
 import { LineChart } from "@/components/LineChart";
 import { useToast } from "@/hooks/use-toast";
 import { TrendingUp, TrendingDown, DollarSign, Activity } from "lucide-react";
-const finnhub = require('finnhub');
+import * as finnhub from 'finnhub';
 
 // Initialize Finnhub client
 const api_key = 'ctvdbspr01qh15ov61f0ctvdbspr01qh15ov61fg';

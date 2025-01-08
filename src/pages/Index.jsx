@@ -11,7 +11,8 @@ import * as finnhub from 'finnhub';
 // Initialize Finnhub client
 const api_key = 'ctvdbspr01qh15ov61f0ctvdbspr01qh15ov61fg';
 const finnhubClient = new finnhub.DefaultApi();
-finnhubClient.apiKey = api_key;
+// Set the API key configuration
+finnhubClient.setApiKey(finnhub.ApiClient.instance.authentications['api_key'], api_key);
 
 const Index = () => {
   const [stocks, setStocks] = useState([]);
@@ -21,19 +22,14 @@ const Index = () => {
   const fetchStockPrice = async (symbol) => {
     try {
       return new Promise((resolve) => {
-        if (!finnhubClient.apiKey) {
-          toast({
-            title: "Error",
-            description: "Please set your Finnhub API key",
-            variant: "destructive",
-          });
-          resolve(null);
-          return;
-        }
-        
         finnhubClient.quote(symbol, (error, data) => {
           if (error) {
             console.error("Error fetching stock price:", error);
+            toast({
+              title: "Error",
+              description: "Failed to fetch stock price",
+              variant: "destructive",
+            });
             resolve(null);
           } else {
             resolve(data.c); // Current price

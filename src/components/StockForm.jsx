@@ -54,19 +54,8 @@ export function StockForm({ onSubmit, editStock = null }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button 
-          className="stock-form-button"
-          style={{
-            background: "linear-gradient(to right, var(--primary) 0%, var(--primary-foreground) 100%)",
-            color: "white",
-            padding: "0.75rem 1.5rem",
-            borderRadius: "0.5rem",
-            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-            transition: "all 0.2s ease-in-out",
-            border: "none",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem"
-          }}
+          variant="default"
+          className="flex items-center gap-2 px-4 py-2 transition-all duration-200 ease-in-out hover:shadow-lg"
         >
           {editStock ? (
             <>
@@ -81,24 +70,24 @@ export function StockForm({ onSubmit, editStock = null }) {
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="stock-form-dialog">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="stock-form-title">
+          <DialogTitle>
             {editStock ? "Edit Stock" : "Add Stock to Portfolio"}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="stock-form">
-          <div className="form-field">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          <div className="grid gap-2">
             <Label htmlFor="name">Stock Name</Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Apple Inc."
-              className="stock-input"
+              className="w-full"
             />
           </div>
-          <div className="form-field">
+          <div className="grid gap-2">
             <Label htmlFor="symbol">Stock Symbol</Label>
             <Input
               id="symbol"
@@ -106,10 +95,10 @@ export function StockForm({ onSubmit, editStock = null }) {
               onChange={(e) => setSymbol(e.target.value)}
               placeholder="AAPL"
               disabled={!!editStock}
-              className="stock-input"
+              className="w-full"
             />
           </div>
-          <div className="form-field">
+          <div className="grid gap-2">
             <Label htmlFor="shares">Number of Shares</Label>
             <Input
               id="shares"
@@ -119,10 +108,10 @@ export function StockForm({ onSubmit, editStock = null }) {
               placeholder="10"
               min="0"
               step="any"
-              className="stock-input"
+              className="w-full"
             />
           </div>
-          <div className="form-field">
+          <div className="grid gap-2">
             <Label htmlFor="buyPrice">Buy Price</Label>
             <Input
               id="buyPrice"
@@ -132,22 +121,12 @@ export function StockForm({ onSubmit, editStock = null }) {
               placeholder="150.00"
               min="0"
               step="0.01"
-              className="stock-input"
+              className="w-full"
             />
           </div>
           <Button 
-            type="submit" 
-            className="submit-button"
-            style={{
-              width: "100%",
-              marginTop: "1rem",
-              background: "linear-gradient(to right, var(--primary) 0%, var(--primary-foreground) 100%)",
-              color: "white",
-              padding: "0.75rem",
-              borderRadius: "0.5rem",
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              transition: "all 0.2s ease-in-out"
-            }}
+            type="submit"
+            className="w-full mt-6"
           >
             {editStock ? "Update Stock" : "Add Stock"}
           </Button>

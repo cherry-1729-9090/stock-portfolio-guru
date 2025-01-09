@@ -16,11 +16,12 @@ export function StockForm({ onSubmit, editStock = null }) {
 
   useEffect(() => {
     if (editStock) {
-      setSymbol(editStock.symbol);
-      setShares(editStock.shares.toString());
-      setName(editStock.name || "");
-      setBuyPrice(editStock.buyPrice?.toString() || "");
-      setOpen(true);
+      setFormData({
+        symbol: editStock.symbol,
+        shares: editStock.quantity,
+        name: editStock.name,
+        buyPrice: editStock.purchasePrice
+      });
     }
   }, [editStock]);
 

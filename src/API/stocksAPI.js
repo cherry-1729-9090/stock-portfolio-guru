@@ -4,7 +4,7 @@ import axiosInstance from "./axiosInstance.js";
 export const getStock = async (symbol) => {
     console.log('Fetching stock:', symbol);
     try {
-        const response = await axiosInstance.get(`/stocks/get/symbol/${symbol}`);
+        const response = await axiosInstance.get(`/stocks/get/${symbol}`);
         console.log('Stock data received:', response.data);
         return response.data;
     } catch (error) {
@@ -31,9 +31,9 @@ export const createStock = async (symbol, quantity, purchasePrice) => {
 };
 
 // Update a stock by ID
-export const updateStock = async (symbol, stockData) => {
+export const updateStock = async (id, stockData) => {
     try {
-        const response = await axiosInstance.put(`/stocks/update/symbol/${symbol}`, {
+        const response = await axiosInstance.put(`/stocks/update/${id}`, {
             ...stockData,
             quantity: Number(stockData.quantity),
             purchasePrice: Number(stockData.purchasePrice)
@@ -45,11 +45,24 @@ export const updateStock = async (symbol, stockData) => {
 };
 
 // Delete a stock by ID
-export const deleteStock = async (symbol) => {
+export const deleteStock = async (id) => {
     try {
-        const response = await axiosInstance.delete(`/stocks/delete/symbol/${symbol}`);
+        const response = await axiosInstance.delete(`/stocks/delete/${id}`);
         return response.data;
     } catch (error) {
         throw error.response?.data || { message: "Failed to delete stock" };
+    }
+};
+
+// Get all stocks
+export const getAllStocks = async () => {
+    console.log('Fetching all stocks');
+    try {
+        const response = await axiosInstance.get('/stocks/get');
+        console.log('All stocks received:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching all stocks:', error);
+        throw error.response?.data || { message: "Failed to fetch all stocks" };
     }
 };

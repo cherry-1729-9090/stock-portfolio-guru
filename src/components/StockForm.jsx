@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,6 +75,11 @@ export function StockForm({ onSubmit, editStock = null }) {
           <DialogTitle>
             {editStock ? "Edit Stock" : "Add Stock to Portfolio"}
           </DialogTitle>
+          <DialogDescription>
+            {editStock 
+              ? "Update the details of your stock holding."
+              : "Enter the details of the stock you want to add to your portfolio."}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="grid gap-2">

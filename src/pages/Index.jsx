@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StockForm } from "@/components/StockForm";
@@ -77,7 +78,7 @@ const Index = () => {
 
   const handleSubmit = async ({ symbol, shares, name, buyPrice }) => {
     const price = await fetchStockPrice(symbol);
-    
+
     if (!price) {
       toast({
         title: "Error",
@@ -88,7 +89,7 @@ const Index = () => {
     }
 
     if (editStock) {
-      setStocks(stocks.map((s) => 
+      setStocks(stocks.map((s) =>
         s.symbol === symbol ? { ...s, shares, name, buyPrice } : s
       ));
       setEditStock(null);
@@ -125,16 +126,46 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container py-12 space-y-12 px-4 mx-auto max-w-7xl">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-            Portfolio Tracker
-          </h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-10"
+      style={{
+        padding: '10px',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          gap: '10px',
+        }}
+      >
+        <h1
+          style={{
+            fontSize: '28px',
+            fontWeight: 'bold',
+            color: '#000000',
+            marginBottom: '10px',
+            textAlign: 'center',
+          }}
+        >
+          Portfolio Tracker
+        </h1>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            padding: '10px',
+          }}
+        >
           <StockForm onSubmit={handleSubmit} editStock={editStock} />
         </div>
-        
-        <div className="grid gap-10 md:grid-cols-3">
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr 1fr',
+          gap: '10px',
+        }}>
           <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Total Value</CardTitle>
@@ -145,7 +176,7 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Total Gain/Loss</CardTitle>
@@ -156,7 +187,7 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Top Holding</CardTitle>
@@ -170,18 +201,26 @@ const Index = () => {
           </Card>
         </div>
 
-        <div className="grid gap-10 md:grid-cols-2">
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '10px',
+        }}>
           <PortfolioChart stocks={stocks} />
           <LineChart stocks={stocks} />
         </div>
 
-        <div className="rounded-lg border bg-card shadow-lg hover:shadow-xl transition-all duration-200">
-          <div className="p-8">
-            <h2 className="text-lg font-semibold mb-6">
+        <div>
+          <div>
+            <h1
+              style={{
+                fontSize: '24px',
+              }}
+            >
               Portfolio Holdings
-            </h2>
-            <StockTable 
-              stocks={stocks} 
+            </h1>
+            <StockTable
+              stocks={stocks}
               onDelete={handleDelete}
               onEdit={handleEdit}
             />

@@ -6,14 +6,7 @@ import { StockTable } from "@/components/StockTable";
 import { PortfolioChart } from "@/components/PortfolioChart";
 import { LineChart } from "@/components/LineChart";
 import { useToast } from "@/hooks/use-toast";
-import * as finnhub from 'finnhub';
-
-// Initialize Finnhub client with API key directly
-const api_key = 'ctvdbspr01qh15ov61f0ctvdbspr01qh15ov61fg';
-const finnhubClient = new finnhub.DefaultApi();
-finnhubClient.apiClient = new finnhub.ApiClient();
-finnhubClient.apiClient.authentications['api_key'].apiKey = api_key;
-
+import { getStock, createStock } from "@/API/stocksAPI";
 const POLLING_INTERVAL = 60000; // Poll every 60 seconds
 
 const Index = () => {
@@ -24,18 +17,8 @@ const Index = () => {
   const fetchStockPrice = async (symbol) => {
     try {
       return new Promise((resolve) => {
-        finnhubClient.quote(symbol, (error, data) => {
-          if (error) {
-            console.error("Error fetching stock price:", error);
-            toast({
-              title: "Error",
-              description: "Failed to fetch stock price",
-              variant: "destructive",
-            });
-            resolve(null);
-          } else {
-            resolve(data.c); // Current price
-          }
+        getStock(symbol).then((data) => {
+          resolve(data);
         });
       });
     } catch (error) {
@@ -77,7 +60,7 @@ const Index = () => {
   }, [stocks.length]); // Dependency on stocks.length to restart polling when stocks are added/removed
 
   const handleSubmit = async ({ symbol, shares, name, buyPrice }) => {
-    const price = await fetchStockPrice(symbol);
+    const price = await createStock(symbol, shares, buyPrice);
 
     if (!price) {
       toast({

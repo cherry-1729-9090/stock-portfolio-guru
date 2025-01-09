@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstancejs";
+import axiosInstance from "./axiosInstance.js";
 
 // Get a specific stock by ID
 export const getStock = async (id) => {
@@ -11,9 +11,13 @@ export const getStock = async (id) => {
 };
 
 // Create a new stock
-export const createStock = async (stockData) => {
+export const createStock = async (symbol, quantity, purchasePrice) => {
   try {
-    const response = await axiosInstance.post('/stocks/create', stockData);
+    const response = await axiosInstance.post('/stocks/create', {
+      symbol,
+      quantity,
+      purchasePrice
+    });
     return response.data;
   } catch (error) {
     throw error.response?.data || { message: "Failed to create stock" };

@@ -16,12 +16,10 @@ export function StockForm({ onSubmit, editStock = null }) {
 
   useEffect(() => {
     if (editStock) {
-      setFormData({
-        symbol: editStock.symbol,
-        shares: editStock.quantity,
-        name: editStock.name,
-        buyPrice: editStock.purchasePrice
-      });
+      setSymbol(editStock.symbol || "");
+      setShares(editStock.quantity || "");
+      setName(editStock.name || "");
+      setBuyPrice(editStock.purchasePrice || "");
     }
   }, [editStock]);
 
@@ -55,44 +53,52 @@ export function StockForm({ onSubmit, editStock = null }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200" color="#F1F1F1">
+        <Button 
+          className="stock-form-button"
+          style={{
+            background: "linear-gradient(to right, var(--primary) 0%, var(--primary-foreground) 100%)",
+            color: "white",
+            padding: "0.75rem 1.5rem",
+            borderRadius: "0.5rem",
+            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+            transition: "all 0.2s ease-in-out",
+            border: "none",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem"
+          }}
+        >
           {editStock ? (
             <>
-              <Edit className="w-4 h-4 mr-2" color="#F1F1F1" />
+              <Edit className="w-4 h-4" />
               Edit Stock
             </>
           ) : (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              color: '#F1F1F1',
-            }}>
-              <Plus className="w-4 h-4 mr-2" color="#F1F1F1" />
+            <>
+              <Plus className="w-4 h-4" />
               Add Stock
-            </div>
+            </>
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <DialogContent className="stock-form-dialog">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+          <DialogTitle className="stock-form-title">
             {editStock ? "Edit Stock" : "Add Stock to Portfolio"}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+        <form onSubmit={handleSubmit} className="stock-form">
+          <div className="form-field">
             <Label htmlFor="name">Stock Name</Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Apple Inc."
-              className="bg-white/50 dark:bg-gray-800/50"
+              className="stock-input"
             />
           </div>
-          <div>
+          <div className="form-field">
             <Label htmlFor="symbol">Stock Symbol</Label>
             <Input
               id="symbol"
@@ -100,10 +106,10 @@ export function StockForm({ onSubmit, editStock = null }) {
               onChange={(e) => setSymbol(e.target.value)}
               placeholder="AAPL"
               disabled={!!editStock}
-              className="bg-white/50 dark:bg-gray-800/50"
+              className="stock-input"
             />
           </div>
-          <div>
+          <div className="form-field">
             <Label htmlFor="shares">Number of Shares</Label>
             <Input
               id="shares"
@@ -113,10 +119,10 @@ export function StockForm({ onSubmit, editStock = null }) {
               placeholder="10"
               min="0"
               step="any"
-              className="bg-white/50 dark:bg-gray-800/50"
+              className="stock-input"
             />
           </div>
-          <div>
+          <div className="form-field">
             <Label htmlFor="buyPrice">Buy Price</Label>
             <Input
               id="buyPrice"
@@ -126,12 +132,22 @@ export function StockForm({ onSubmit, editStock = null }) {
               placeholder="150.00"
               min="0"
               step="0.01"
-              className="bg-white/50 dark:bg-gray-800/50"
+              className="stock-input"
             />
           </div>
           <Button 
             type="submit" 
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
+            className="submit-button"
+            style={{
+              width: "100%",
+              marginTop: "1rem",
+              background: "linear-gradient(to right, var(--primary) 0%, var(--primary-foreground) 100%)",
+              color: "white",
+              padding: "0.75rem",
+              borderRadius: "0.5rem",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+              transition: "all 0.2s ease-in-out"
+            }}
           >
             {editStock ? "Update Stock" : "Add Stock"}
           </Button>

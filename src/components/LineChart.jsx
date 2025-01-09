@@ -1,11 +1,9 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Area, ComposedChart } from 'recharts';
 
 const COLORS = ["#1E3A8A", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD"];
 
 export function LineChart({ stocks }) {
-  // Create data points for the chart with timestamps
   const data = stocks.map((stock) => {
     const value = stock.shares * stock.price;
     const profit = stock.shares * (stock.price - stock.buyPrice);
@@ -22,7 +20,6 @@ export function LineChart({ stocks }) {
     };
   });
 
-  // Custom tooltip to show detailed information
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const stockData = payload[0].payload;
@@ -31,9 +28,9 @@ export function LineChart({ stocks }) {
         : Number(stockData.price || 0).toFixed(2);
 
       return (
-        <div className="custom-tooltip bg-white p-3 border rounded-lg shadow-lg">
-          <p className="label text-sm text-gray-600">{`Date: ${stockData.date}`}</p>
-          <p className="price text-sm font-semibold">{`Price: $${price}`}</p>
+        <div className="card p-4">
+          <p className="text-sm text-muted">{`Date: ${stockData.date}`}</p>
+          <p className="text-sm font-semibold">{`Price: $${price}`}</p>
         </div>
       );
     }
@@ -41,11 +38,11 @@ export function LineChart({ stocks }) {
   };
 
   return (
-    <Card className="h-[400px]">
-      <CardHeader>
-        <CardTitle>Stock Performance</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="card chart-container">
+      <div className="card-header">
+        <h3 className="card-title">Stock Performance</h3>
+      </div>
+      <div className="card-content">
         <ResponsiveContainer width="100%" height={300}>
           <ComposedChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" className="opacity-50" />
@@ -95,7 +92,7 @@ export function LineChart({ stocks }) {
             ))}
           </ComposedChart>
         </ResponsiveContainer>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

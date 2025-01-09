@@ -1,5 +1,4 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const COLORS = ["#1E3A8A", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD"];
 
@@ -10,11 +9,11 @@ export function PortfolioChart({ stocks }) {
   }));
 
   return (
-    <Card className="h-[400px]">
-      <CardHeader>
-        <CardTitle>Portfolio Distribution</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="card chart-container">
+      <div className="card-header">
+        <h3 className="card-title">Portfolio Distribution</h3>
+      </div>
+      <div className="card-content">
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
@@ -34,7 +33,7 @@ export function PortfolioChart({ stocks }) {
             <Legend />
           </PieChart>
         </ResponsiveContainer>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StockForm } from "@/components/StockForm";
 import { StockTable } from "@/components/StockTable";
 import { PortfolioChart } from "@/components/PortfolioChart";
 import { LineChart } from "@/components/LineChart";
 import { useToast } from "@/hooks/use-toast";
 import { getStock, createStock, updateStock, deleteStock, getAllStocks } from "@/API/stocksAPI";
-const POLLING_INTERVAL = 60000; // Poll every 600 seconds
+
+const POLLING_INTERVAL = 60000;
 
 const Index = () => {
   const [stocks, setStocks] = useState([]);
@@ -147,106 +147,62 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-10"
-      style={{
-        padding: '10px',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          gap: '10px',
-        }}
-      >
-        <h1
-          style={{
-            fontSize: '28px',
-            fontWeight: 'bold',
-            color: '#000000',
-            margin: '1rem',
-            textAlign: 'center',
-          }}
-        >
-          Portfolio Tracker
-        </h1>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            padding: '10px',
-          }}
-        >
+    <div className="dashboard">
+      <div className="container">
+        <h1 className="portfolio-header">Portfolio Tracker</h1>
+        
+        <div className="stock-form-container">
           <StockForm onSubmit={handleSubmit} editStock={editStock} />
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr',
-          gap: '10px',
-        }}>
-          <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Total Value</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold animate-number-change">
+        <div className="stats-grid">
+          <div className="card stat-card">
+            <div className="card-header">
+              <h3 className="card-title text-sm">Total Value</h3>
+            </div>
+            <div className="card-content">
+              <div className="text-lg font-bold animate-number-change">
                 ${totalValue.toFixed(2)}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Total Gain/Loss</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className={`text-2xl font-bold ${totalGain >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+          <div className="card stat-card">
+            <div className="card-header">
+              <h3 className="card-title text-sm">Total Gain/Loss</h3>
+            </div>
+            <div className="card-content">
+              <div className={`text-lg font-bold ${totalGain >= 0 ? 'text-success' : 'text-error'}`}>
                 ${totalGain.toFixed(2)}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-none shadow-lg hover:shadow-xl transition-all duration-200">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Top Holding</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{topStock.symbol}</div>
-              <p className="text-xl font-bold text-muted-foreground">
+          <div className="card stat-card">
+            <div className="card-header">
+              <h3 className="card-title text-sm">Top Holding</h3>
+            </div>
+            <div className="card-content">
+              <div className="text-lg font-bold">{topStock.symbol}</div>
+              <p className="text-lg font-bold text-muted">
                 ${topStock.value.toFixed(2)}
               </p>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '10px',
-        }}>
+        <div className="charts-grid">
           <PortfolioChart stocks={stocks} />
           <LineChart stocks={stocks} />
         </div>
 
-        <div>
-          <div>
-            <h1
-              style={{
-                fontSize: '24px',
-                margin: '1rem',
-              }}
-            >
-              Portfolio Holdings
-            </h1>
-            <StockTable
-              stocks={stocks}
-              onDelete={handleDelete}
-              onEdit={handleEdit}
-            />
-          </div>
+        <div className="portfolio-holdings">
+          <h2 className="holdings-title">Portfolio Holdings</h2>
+          <StockTable
+            stocks={stocks}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+          />
         </div>
       </div>
     </div>

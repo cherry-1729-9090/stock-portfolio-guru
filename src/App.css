@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -33,10 +35,71 @@
   }
 }
 
-.card {
-  padding: 2em;
+.dashboard {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #f8fafc, #f1f5f9);
+  padding: 2.5rem;
 }
 
-.read-the-docs {
-  color: #888;
+.dashboard.dark {
+  background: linear-gradient(to bottom right, #020817, #1e293b);
+}
+
+.portfolio-header {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: var(--foreground);
+  margin: 1rem;
+  text-align: center;
+}
+
+.stock-form-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 0.625rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.625rem;
+}
+
+.stat-card {
+  background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.stat-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.625rem;
+  margin-top: 1rem;
+}
+
+.portfolio-holdings {
+  margin-top: 1rem;
+}
+
+.holdings-title {
+  font-size: 1.5rem;
+  margin: 1rem;
+}
+
+@media (max-width: 768px) {
+  .stats-grid,
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard {
+    padding: 1rem;
+  }
 }

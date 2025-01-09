@@ -55,24 +55,27 @@ export function StockForm({ onSubmit, editStock = null }) {
       <DialogTrigger asChild>
         <Button 
           variant="default"
-          className="flex items-center gap-2 px-4 py-2 transition-all duration-200 ease-in-out hover:shadow-lg"
+          className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 
+                     text-white font-semibold px-6 py-3 rounded-lg shadow-lg 
+                     transform transition-all duration-200 hover:scale-105 hover:shadow-xl
+                     flex items-center gap-2 animate-fade-in"
         >
           {editStock ? (
             <>
-              <Edit className="w-4 h-4" />
+              <Edit className="w-5 h-5" />
               Edit Stock
             </>
           ) : (
             <>
-              <Plus className="w-4 h-4" />
+              <Plus className="w-5 h-5" />
               Add Stock
             </>
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 animate-scale-in">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
             {editStock ? "Edit Stock" : "Add Stock to Portfolio"}
           </DialogTitle>
           <DialogDescription>
@@ -81,57 +84,61 @@ export function StockForm({ onSubmit, editStock = null }) {
               : "Enter the details of the stock you want to add to your portfolio."}
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          <div className="grid gap-2">
-            <Label htmlFor="name">Stock Name</Label>
-            <Input
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Apple Inc."
-              className="w-full"
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="symbol">Stock Symbol</Label>
-            <Input
-              id="symbol"
-              value={symbol}
-              onChange={(e) => setSymbol(e.target.value)}
-              placeholder="AAPL"
-              disabled={!!editStock}
-              className="w-full"
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="shares">Number of Shares</Label>
-            <Input
-              id="shares"
-              type="number"
-              value={shares}
-              onChange={(e) => setShares(e.target.value)}
-              placeholder="10"
-              min="0"
-              step="any"
-              className="w-full"
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="buyPrice">Buy Price</Label>
-            <Input
-              id="buyPrice"
-              type="number"
-              value={buyPrice}
-              onChange={(e) => setBuyPrice(e.target.value)}
-              placeholder="150.00"
-              min="0"
-              step="0.01"
-              className="w-full"
-            />
+        <form onSubmit={handleSubmit} className="space-y-6 mt-4">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-sm font-medium">Stock Name</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Apple Inc."
+                className="w-full transition-all duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="symbol" className="text-sm font-medium">Stock Symbol</Label>
+              <Input
+                id="symbol"
+                value={symbol}
+                onChange={(e) => setSymbol(e.target.value)}
+                placeholder="AAPL"
+                disabled={!!editStock}
+                className="w-full transition-all duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="shares" className="text-sm font-medium">Number of Shares</Label>
+              <Input
+                id="shares"
+                type="number"
+                value={shares}
+                onChange={(e) => setShares(e.target.value)}
+                placeholder="10"
+                min="0"
+                step="any"
+                className="w-full transition-all duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="buyPrice" className="text-sm font-medium">Buy Price</Label>
+              <Input
+                id="buyPrice"
+                type="number"
+                value={buyPrice}
+                onChange={(e) => setBuyPrice(e.target.value)}
+                placeholder="150.00"
+                min="0"
+                step="0.01"
+                className="w-full transition-all duration-200 hover:border-blue-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              />
+            </div>
           </div>
           <Button 
             type="submit"
-            className="w-full mt-6"
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 
+                       text-white font-semibold py-3 rounded-lg shadow-md
+                       transform transition-all duration-200 hover:scale-105 hover:shadow-lg"
           >
             {editStock ? "Update Stock" : "Add Stock"}
           </Button>

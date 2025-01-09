@@ -144,7 +144,7 @@ const Index = () => {
             fontSize: '28px',
             fontWeight: 'bold',
             color: '#000000',
-            marginBottom: '10px',
+            margin: '1rem',
             textAlign: 'center',
           }}
         >
@@ -194,7 +194,7 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{topStock.symbol}</div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xl font-bold text-muted-foreground">
                 ${topStock.value.toFixed(2)}
               </p>
             </CardContent>
@@ -215,6 +215,7 @@ const Index = () => {
             <h1
               style={{
                 fontSize: '24px',
+                margin: '1rem',
               }}
             >
               Portfolio Holdings

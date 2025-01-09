@@ -14,10 +14,10 @@ const Index = () => {
   const [editStock, setEditStock] = useState(null);
   const { toast } = useToast();
 
-  const fetchStockPrice = async (symbol) => {
+  const fetchStockPrice = async (id) => {
     try {
       return new Promise((resolve) => {
-        getStock(symbol).then((data) => {
+        getStock(id).then((data) => {
           resolve(data);
         });
       });
@@ -30,7 +30,7 @@ const Index = () => {
   const updatePrices = async () => {
     const updatedStocks = await Promise.all(
       stocks.map(async (stock) => {
-        const price = await fetchStockPrice(stock.symbol);
+        const price = await fetchStockPrice(stock._id);
         return price ? { ...stock, price } : stock;
       })
     );

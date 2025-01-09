@@ -24,13 +24,17 @@ export function StockTable({ stocks, onDelete, onEdit }) {
             const gainLoss = stock.shares * (stock.price - stock.buyPrice);
             const gainLossPercentage = ((stock.price - stock.buyPrice) / stock.buyPrice) * 100;
             
+            const formattedPrice = typeof stock.price === 'number' 
+              ? stock.price.toFixed(2) 
+              : Number(stock.price).toFixed(2);
+            
             return (
               <TableRow key={stock.symbol} className="hover:bg-gray-50/80 dark:hover:bg-gray-700/50 transition-colors">
                 <TableCell className="font-medium">{stock.name}</TableCell>
                 <TableCell>{stock.symbol}</TableCell>
                 <TableCell>{stock.shares}</TableCell>
                 <TableCell className="font-mono">${stock.buyPrice?.toFixed(2)}</TableCell>
-                <TableCell className="font-mono">${stock.price.toFixed(2)}</TableCell>
+                <TableCell className="font-mono">${formattedPrice}</TableCell>
                 <TableCell className="font-mono">${totalValue.toFixed(2)}</TableCell>
                 <TableCell>
                   <span className={`font-mono ${gainLoss >= 0 ? 'text-green-600' : 'text-red-600'}`}>

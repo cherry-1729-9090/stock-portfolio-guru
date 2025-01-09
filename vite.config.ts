@@ -8,6 +8,12 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    hmr: {
+      protocol: 'ws',
+    },
+    watch: {
+      usePolling: true,
+    },
   },
   plugins: [
     react(),
@@ -19,4 +25,9 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  logLevel: 'info',
+  clearScreen: false,
+  build: {
+    sourcemap: true,
+  }
 }));

@@ -23,21 +23,17 @@ export function LineChart({ stocks }) {
   });
 
   // Custom tooltip to show detailed information
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const stockData = payload[0].payload;
+      const price = typeof stockData.price === 'number' 
+        ? stockData.price.toFixed(2) 
+        : Number(stockData.price || 0).toFixed(2);
+
       return (
-        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
-          <p className="font-bold text-lg mb-2">{stockData.name}</p>
-          <div className="space-y-1">
-            <p className="text-sm">Current Price: ${stockData.price.toFixed(2)}</p>
-            <p className="text-sm">Buy Price: ${stockData.buyPrice.toFixed(2)}</p>
-            <p className="text-sm">Shares: {stockData.shares}</p>
-            <p className="text-sm">Total Value: ${stockData.value.toFixed(2)}</p>
-            <p className={`text-sm ${stockData.profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              Profit/Loss: ${stockData.profit.toFixed(2)} ({stockData.profitPercentage}%)
-            </p>
-          </div>
+        <div className="custom-tooltip bg-white p-3 border rounded-lg shadow-lg">
+          <p className="label text-sm text-gray-600">{`Date: ${stockData.date}`}</p>
+          <p className="price text-sm font-semibold">{`Price: $${price}`}</p>
         </div>
       );
     }

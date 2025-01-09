@@ -3,14 +3,49 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { loginUser, registerUser } from "@/API/UserAPI";
+import { useToast } from "@/components/ui/use-toast";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/dashboard");
+    try {
+      if (isLogin) {
+        await loginUser(formData);
+        toast({
+          title: "Success",
+          description: "Logged in successfully",
+        });
+      } else {
+        await registerUser(formData);
+        toast({
+          title: "Success",
+          description: "Account created successfully",
+        });
+      }
+      navigate("/dashboard");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "An error occurred",
+      });
+    }
   };
 
   return (
@@ -47,9 +82,12 @@ const Auth = () => {
               <div className="relative">
                 <Input
                   type="email"
+                  name="email"
                   placeholder="Email"
                   required
                   className="pl-10 py-6"
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -57,9 +95,12 @@ const Auth = () => {
               <div className="relative">
                 <Input
                   type="password"
+                  name="password"
                   placeholder="Password"
                   required
                   className="pl-10 py-6"
+                  value={formData.password}
+                  onChange={handleChange}
                 />
               </div>
             </div>
